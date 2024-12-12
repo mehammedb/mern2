@@ -1,6 +1,11 @@
 const express = require("express");
+const route = require("./routes/route");
 const app = express();
 
-app.listen(process.env.PORT || 400, () => {
-  console.log("App is listtening on port " + process.env.PORT);
+const port = process.env.PORT || 4000;
+
+app.use("/api/workouts", route);
+
+app.listen(port, () => {
+  console.log("App is listening on port " + port);
 });
