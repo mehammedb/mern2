@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import WorkoutDetail from "./WorkoutDetail";
 
 const Home = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -26,11 +27,7 @@ const Home = () => {
   return (
     <div className="flex flex-col gap-7 w-[600px] p-7">
       {workouts.map((wo) => (
-        <div key={wo._id} className="w-full shadow-lg flex flex-col">
-          <p>{wo.title}</p>
-          <p> Load: {wo.load}</p>
-          <p>Reps: {wo.reps}</p>
-        </div>
+        <WorkoutDetail key={wo._id} workout={wo} />
       ))}
     </div>
   );
