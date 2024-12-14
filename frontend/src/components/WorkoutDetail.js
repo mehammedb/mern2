@@ -1,4 +1,8 @@
+import DeleteButton from "./DeleteButton";
+
 const WorkoutDetail = ({ workout }) => {
+  const handleDelete = () => {};
+
   return (
     <div className="w-full shadow-lg flex flex-row justify-between p-2">
       <div className="">
@@ -6,7 +10,7 @@ const WorkoutDetail = ({ workout }) => {
         <p> Load: {workout.load}</p>
         <p>Reps: {workout.reps}</p>
       </div>
-      <div className="">Delete</div>
+      <DeleteButton onDelete={handleDelete} />
     </div>
   );
 };
