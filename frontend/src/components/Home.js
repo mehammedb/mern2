@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import WorkoutDetail from "./WorkoutDetail";
 import WorkoutForm from "./WorkoutForm";
+import { useWorkout } from "../context/context";
 
 const Home = () => {
-  const [workouts, setWorkouts] = useState([]);
+  const { workouts, dispatch } = useWorkout();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/workouts");
         if (response.ok) {
           const json = await response.json();
-          setWorkouts(json);
+          dispatch({ type: "SET_WORKOUT", payload: json });
         } else {
           console.error("Failed to fetch workouts:", response.statusText);
         }
@@ -19,10 +20,15 @@ const Home = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [workouts]);
 
   if (workouts.length === 0) {
-    return <p>No workouts available.</p>;
+    return (
+      <div className="flex flex-row justify-around">
+        <p>No workouts available.</p>
+        <WorkoutForm />
+      </div>
+    );
   }
 
   return (

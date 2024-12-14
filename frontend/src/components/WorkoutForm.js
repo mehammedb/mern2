@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { useWorkout } from "../context/context";
 
 const WorkoutForm = () => {
   const [title, setTitle] = useState("");
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
-  const [workouts, setWorkout] = useState([]);
   const [error, setError] = useState("");
+
+  const { dispatch } = useWorkout();
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ const WorkoutForm = () => {
       });
       const json = await response.json();
       if (response.ok) {
-        setWorkout(json);
+        dispatch({ type: "CREATE_WORKOUT", payload: json });
         setError("");
       } else {
         setError(json.error);

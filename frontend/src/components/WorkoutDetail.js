@@ -1,7 +1,19 @@
+import { useWorkout } from "../context/context";
 import DeleteButton from "./DeleteButton";
 
 const WorkoutDetail = ({ workout }) => {
-  const handleDelete = () => {};
+  const { dispatch } = useWorkout();
+  const handleDelete = async () => {
+    try {
+      const response = await fetch("/api/workouts/" + workout._id, {
+        method: "DELETE",
+      });
+      const json = await response.json();
+      if (response.ok) {
+        dispatch({ type: "DELETE_WORKOUT", payload: json._id });
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="w-full shadow-lg flex flex-row justify-between p-2">
