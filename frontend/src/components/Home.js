@@ -20,7 +20,7 @@ const Home = () => {
       }
     };
     fetchData();
-  }, [workouts]);
+  }, []);
 
   if (workouts.length === 0) {
     return (
