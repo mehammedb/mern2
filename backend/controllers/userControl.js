@@ -24,7 +24,21 @@ const userSignup = async (req, res) => {
 };
 
 const userLogin = async (req, res) => {
-  res.status(200).json({ msg: "Login" });
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(401).json({ error: "All fields are mandatory!" });
+  }
+
+  if (!validator.isEmail(email)) {
+    return res.status(401).json({ error: "Invalid email!" });
+  }
+  try {
+    const user = await User.login(email, password);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
 module.exports = { userLogin, userSignup };
