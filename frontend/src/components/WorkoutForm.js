@@ -6,11 +6,14 @@ const WorkoutForm = () => {
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
   const [error, setError] = useState("");
+  const [isDisable, setIsDisable] = useState(false);
+  const [emptyFields, setEmptyFields] = useState([]);
 
   const { dispatch } = useWorkout();
 
   const handleForm = async (e) => {
     e.preventDefault();
+    setIsDisable(true);
     const workout = { title, load, reps };
     try {
       const response = await fetch("/api/workouts", {
@@ -23,13 +26,22 @@ const WorkoutForm = () => {
       const json = await response.json();
       if (response.ok) {
         dispatch({ type: "CREATE_WORKOUT", payload: json });
+        setTitle("");
+        setLoad("");
+        setReps("");
         setError("");
+        setIsDisable(false);
+        setEmptyFields([]);
       } else {
         setError(json.error);
+        setIsDisable(false);
+        setEmptyFields(json.emptyFields);
       }
     } catch (error) {
       setError(error.message);
+      setIsDisable(false);
     }
+    setIsDisable(false);
   };
 
   return (
@@ -39,7 +51,9 @@ const WorkoutForm = () => {
         <input
           type="text"
           name="title"
-          className="p-2 border"
+          className={`p-2 border ${
+            emptyFields.includes("title") ? "border-red-400" : ""
+          }`}
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
@@ -49,7 +63,9 @@ const WorkoutForm = () => {
         <input
           type="number"
           name="load"
-          className="p-2 border"
+          className={`p-2 border ${
+            emptyFields.includes("load") ? "border-red-400" : ""
+          }`}
           min={1}
           onChange={(e) => {
             setLoad(e.target.value);
@@ -62,7 +78,9 @@ const WorkoutForm = () => {
         <input
           type="number"
           name="reps"
-          className="p-2 border"
+          className={`p-2 border ${
+            emptyFields.includes("reps") ? "border-red-400" : ""
+          }`}
           min={1}
           onChange={(e) => {
             setReps(e.target.value);
@@ -70,10 +88,17 @@ const WorkoutForm = () => {
           value={reps}
         />
       </div>
-      <button className="bg-blue-600 text-white font-bold p-3">
-        Add workout
+      <button
+        className={`text-white font-bold p-3 ${
+          isDisable ? "bg-gray-400" : "bg-blue-600"
+        }`}
+        disabled={isDisable}
+      >
+        {isDisable ? "Adding workout..." : "Add workout"}
       </button>
-      {error}
+      <p className={`${error && "text-red-500 border p-2 border-red-500"}`}>
+        {error}
+      </p>
     </form>
   );
 };
