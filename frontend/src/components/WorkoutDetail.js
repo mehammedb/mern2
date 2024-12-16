@@ -1,5 +1,6 @@
 import { useWorkout } from "../context/context";
 import DeleteButton from "./DeleteButton";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const WorkoutDetail = ({ workout }) => {
   const { dispatch } = useWorkout();
@@ -21,6 +22,11 @@ const WorkoutDetail = ({ workout }) => {
         <p className="font-bold pb-4 text-lg text-green-700">{workout.title}</p>
         <p> Load: {workout.load}</p>
         <p>Reps: {workout.reps}</p>
+        <p>
+          {formatDistanceToNow(new Date(workout.createdAt), {
+            addSuffix: true,
+          })}
+        </p>
       </div>
       <DeleteButton onDelete={handleDelete} />
     </div>
