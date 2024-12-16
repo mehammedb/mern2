@@ -4,7 +4,7 @@ const {
   getAllWorkouts,
   updateWorkout,
   deleteWorkout,
-} = require("../controllers/control");
+} = require("../controllers/workoutControl");
 const express = require("express");
 const route = express.Router();
 
