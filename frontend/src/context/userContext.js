@@ -1,8 +1,11 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 
 const UserContext = React.createContext();
 
-const initial_state = { user: null };
+const initial_state = {
+  user: JSON.parse(localStorage.getItem("user")) || null,
+};
+
 const userReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
@@ -16,6 +19,7 @@ const userReducer = (state, action) => {
 
 const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initial_state);
+
   return (
     <UserContext.Provider value={{ ...state, dispatch }}>
       {children}

@@ -37,6 +37,7 @@ const LoginPage = () => {
     console.log(response);
     const data = await response.json();
     if (response.ok) {
+      localStorage.setItem("user", JSON.stringify(data));
       dispatch({ type: "LOGIN", payload: data });
     } else {
       setError(data.error);
