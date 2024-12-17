@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import { WorkoutProvider } from "./context/workoutContext";
 import LoginPage from "./pages/Login";
 import { UserContextProvider } from "./context/userContext";
+import SignUpPage from "./pages/Signup";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
             </Routes>
           </BrowserRouter>
         </WorkoutProvider>

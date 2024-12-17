@@ -2,32 +2,40 @@ import Button from "../components/Button";
 import { useState } from "react";
 import { useUserContext } from "../context/userContext";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repassword, setRePassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [emptyFields, setEmptyfields] = useState([]);
   const { dispatch } = useUserContext();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
     setEmptyfields([]);
     const missingFields = [];
 
-    if (!email || !password) {
+    if (!email || !password || !repassword) {
       if (!email) {
         missingFields.push("email");
       }
       if (!password) {
         missingFields.push("password");
       }
+      if (!repassword) {
+        missingFields.push("repassword");
+      }
       setEmptyfields(missingFields);
       return setError("Please fill all fields!");
     }
+
+    if (password !== repassword) {
+      return setError("Password must be the same!");
+    }
     setLoading(true);
-    const response = await fetch("/api/user/login", {
+    const response = await fetch("/api/user/signup", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {
@@ -47,10 +55,10 @@ const LoginPage = () => {
     <div className="w-screen h-screen bg-gray-200 flex justify-center items-center">
       <form
         className="bg-white flex flex-col w-[400px] p-2 gap-2 rounded-xl"
-        onSubmit={handleLogin}
+        onSubmit={handleSignup}
       >
         <h1 className="text-lg text-green-600 font-bold p-3 text-center">
-          Login page
+          Signup page
         </h1>
         <div className="flex flex-col gap-2">
           <label>Email</label>
@@ -74,9 +82,20 @@ const LoginPage = () => {
             value={password}
           />
         </div>
+        <div className="flex flex-col gap-2">
+          <label>Re-Password</label>
+          <input
+            type="password"
+            className={`p-2 border ${
+              emptyFields.includes("repassword") ? "border-red-400" : ""
+            }`}
+            onChange={(e) => setRePassword(e.target.value)}
+            value={repassword}
+          />
+        </div>
         <Button
-          labelActive={"Login"}
-          labelDeactive={"Logging in...."}
+          labelActive={"SignUp"}
+          labelDeactive={"Signing in...."}
           isDisabled={loading}
         />
         {error && (
@@ -89,4 +108,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
