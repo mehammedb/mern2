@@ -1,4 +1,4 @@
-import { useWorkout } from "../context/context";
+import { useWorkout } from "../context/workoutContext";
 import DeleteButton from "./DeleteButton";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 

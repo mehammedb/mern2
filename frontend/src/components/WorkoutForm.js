@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useWorkout } from "../context/context";
+import { useWorkout } from "../context/workoutContext";
 
 const WorkoutForm = () => {
   const [title, setTitle] = useState("");
