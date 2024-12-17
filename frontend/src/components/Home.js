@@ -2,13 +2,20 @@ import { useEffect } from "react";
 import WorkoutDetail from "./WorkoutDetail";
 import WorkoutForm from "./WorkoutForm";
 import { useWorkout } from "../context/workoutContext";
+import { useUserContext } from "../context/userContext";
 
 const Home = () => {
   const { workouts, dispatch } = useWorkout();
+  const { user } = useUserContext();
   useEffect(() => {
     const fetchData = async () => {
+      console.log("mameawa", user);
       try {
-        const response = await fetch("/api/workouts");
+        const response = await fetch("/api/workouts", {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        });
         if (response.ok) {
           const json = await response.json();
           dispatch({ type: "SET_WORKOUT", payload: json });
@@ -19,7 +26,9 @@ const Home = () => {
         console.error("Error fetching workouts:", error);
       }
     };
-    fetchData();
+    if (user) {
+      fetchData();
+    }
   }, []);
 
   if (workouts.length === 0) {

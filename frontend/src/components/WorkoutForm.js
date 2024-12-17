@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useWorkout } from "../context/workoutContext";
+import { useUserContext } from "../context/userContext";
 
 const WorkoutForm = () => {
   const [title, setTitle] = useState("");
@@ -8,11 +9,16 @@ const WorkoutForm = () => {
   const [error, setError] = useState("");
   const [isDisable, setIsDisable] = useState(false);
   const [emptyFields, setEmptyFields] = useState([]);
+  const { user } = useUserContext();
 
   const { dispatch } = useWorkout();
 
   const handleForm = async (e) => {
     e.preventDefault();
+    if (!user) {
+      setError("You must be logged in first!");
+      return;
+    }
     setIsDisable(true);
     const workout = { title, load, reps };
     try {
@@ -20,6 +26,7 @@ const WorkoutForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(workout),
       });

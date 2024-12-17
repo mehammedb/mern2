@@ -1,13 +1,21 @@
+import { useUserContext } from "../context/userContext";
 import { useWorkout } from "../context/workoutContext";
 import DeleteButton from "./DeleteButton";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const WorkoutDetail = ({ workout }) => {
   const { dispatch } = useWorkout();
+  const { user } = useUserContext();
   const handleDelete = async () => {
+    if (!user) {
+      return;
+    }
     try {
       const response = await fetch("/api/workouts/" + workout._id, {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
       });
       const json = await response.json();
       if (response.ok) {
